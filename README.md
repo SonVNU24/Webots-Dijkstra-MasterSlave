@@ -1,73 +1,33 @@
-🤖 Hệ thống Robot Master – Slave tìm đường trong Webots
+# Hệ thống 2 Robot Master - Slave vận chuyển phân bón trên Webots
+## 1. Giới thiệu
+Mô phỏng hệ thống hai robot hoạt động theo mô hình **Master - Slave** trong môi trường Webots.
+Kịch bản mô phỏng gồm:
+- **Robot 1 - Master**: đứng cố định tại góc bản đồ, không trực tiếp di chuyển.
+- **Robot 2 - Slave**: robot thực hiện nhiệm vụ di chuyển đến vị trí cần bón phân.
+- Master nhận vị trí hiện tại của Slave, chạy thuật toán **Dijkstra** để tìm đường đi ngắn nhất đến đích.
+- Sau khi tính toán xong, Master gửi danh sách tọa độ đường đi, tức các **waypoints**, qua sóng radio cho Slave.
+- Slave nhận mảng tọa độ và di chuyển lần lượt qua các điểm đó.
+Mục tiêu của hệ thống là mô phỏng một mô hình robot nông nghiệp đơn giản, trong đó một robot trung tâm chịu trách nhiệm tính toán lộ trình, còn robot còn lại chỉ thực thi nhiệm vụ di chuyển.
+## 2. Công nghệ sử dụng
+- Webots
+- Python Controller
+- Emitter / Receiver
+- GPS
+- Compass
+- Differential Wheel Motor
+- Thuật toán Dijkstra
+- Mô hình điều khiển Master - Slave
+## 3. Cấu trúc hệ thống
+Master Robot
+│
+├── Nhận vị trí hiện tại của Slave
+├── Chạy thuật toán Dijkstra
+├── Tạo danh sách waypoint
+└── Gửi waypoint qua Emitter
 
-📌 Giới thiệu
-
-Dự án mô phỏng hệ thống gồm 2 robot hoạt động theo mô hình Master – Slave trong môi trường Webots.
-
-Robot Master đứng yên tại một vị trí trên bản đồ, có nhiệm vụ nhận dữ liệu và tính toán đường đi.
-
-Robot Slave di chuyển trong môi trường, gửi vị trí hiện tại và thực hiện di chuyển theo lộ trình do Master cung cấp.
-
-🗺️ Môi trường mô phỏng
-
-Sử dụng RectangleArena trong Webots
-
-Kích thước sàn: khoảng 6.5 x 6.5 m
-
-Bản đồ được chia thành lưới 12 x 12 ô
-
-Mỗi ô có kích thước 0.5 x 0.5 m
-
-Bản đồ được biểu diễn bằng ma trận (grid), trong đó:
-
-0: ô có thể đi qua
-1: ô chứa vật cản
-
-🔄 Nguyên lý hoạt động
-
-Hệ thống hoạt động theo các bước:
-
-Slave xác định vị trí bằng GPS và chuyển sang tọa độ grid
-
-Slave gửi vị trí hiện tại cho Master
-
-Master nhận dữ liệu, sử dụng thuật toán Dijkstra để tìm đường đến đích
-
-Master gửi lộ trình (danh sách các ô) cho Slave
-
-Slave di chuyển lần lượt theo các điểm trong lộ trình đến đích
-
-⚙️ Thành phần hệ thống
-
-🔹 Robot Master
-
-Receiver: nhận vị trí từ Slave
-
-Emitter: gửi đường đi
-
-Thuật toán Dijkstra để tìm đường
-
-🔹 Robot Slave
-
-GPS: xác định vị trí
-
-Compass: xác định hướng di chuyển
-
-Emitter: gửi vị trí
-
-
-Receiver: nhận lộ trình
-
-2 động cơ: điều khiển di chuyển
-
-🎯 Kết quả
-
-Hệ thống xác định được vị trí của Slave trên bản đồ
-
-Master tìm được đường đi hợp lệ tránh vật cản
-
-Slave di chuyển theo lộ trình và đến đúng vị trí đích
-
-🚀 Kết luận
-
-Dự án giúp hiểu rõ: cách xây dựng bản đồ dạng lưới, cách áp dụng thuật toán tìm đường, cách giao tiếp giữa các robot, cách điều khiển robot trong môi trường mô phỏng
+Slave Robot
+│
+├── Gửi vị trí hiện tại cho Master
+├── Nhận waypoint qua Receiver
+├── Chuyển tọa độ grid sang tọa độ Webots
+└── Di chuyển lần lượt qua các checkpoint
